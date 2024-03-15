@@ -25,16 +25,16 @@ void first() {
 	cout << "Sum = " << itog << endl;
 	return;
 
-	}
+}
 
-	void merge(int* array, int low, int mid, int high)
+	void merge(int* array, int left, int mid, int right)
 	{
-		int* temp = new int[high + 1];
-		int i = low;
+		int* temp = new int[right + 1];
+		int i = left;
 		int j = mid + 1;
 		int k = 0;
 
-		while (i <= mid && j <= high)
+		while (i <= mid && j <= right)
 		{
 			if (array[i] <= array[j])
 				temp[k++] = array[i++];
@@ -48,7 +48,7 @@ void first() {
 		k--;
 		while (k >= 0)
 		{
-			array[k + low] = temp[k];
+			array[k + left] = temp[k];
 			k--;
 		}
 	}
@@ -91,11 +91,12 @@ void first() {
 		}
 
 		const int processor_count = std::thread::hardware_concurrency() / 2;
+		//first time
 		std::chrono::high_resolution_clock::time_point start1 = std::chrono::high_resolution_clock::now();
 		sort(myArray, 0, arraySize - 1);
 		std::chrono::high_resolution_clock::time_point end1 = std::chrono::high_resolution_clock::now();
 		std::chrono::nanoseconds duration1 = std::chrono::duration_cast<std::chrono::nanoseconds>(end1 - start1);
-
+		// second time parallel
 		std::chrono::high_resolution_clock::time_point start2 = std::chrono::high_resolution_clock::now();
 		sort_parallel(myArray1, 0, arraySize - 1);
 		std::chrono::high_resolution_clock::time_point end2 = std::chrono::high_resolution_clock::now();
@@ -105,13 +106,14 @@ void first() {
 			std::cout << myArray[i] << " ";
 		}
 		std::cout << std::endl;
-		std::cout << "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < arraySize; i++) {
 			std::cout << myArray1[i] << " ";
 		}
 		std::cout << std::endl;
-
+		std::cout << "Время сортировки: " << std::endl;
 		std::cout << duration1.count() << std::endl;
+		std::cout << "Время параллельной сортировки: " << std::endl;
 		std::cout << duration2.count() << std::endl;
 	}
 
