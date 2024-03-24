@@ -24,7 +24,6 @@ int main() {
     
     Canny(new_image, edges, 0, 100);
     imshow("Edges", edges);
-    // выделение контуров
     vector<vector<cv::Point> > contours;
     vector<cv::Vec4i> hierarchy;
     findContours(edges, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
