@@ -27,7 +27,8 @@ int main()
 
     int frame_width = cap.get(CAP_PROP_FRAME_WIDTH);
     int frame_height = cap.get(CAP_PROP_FRAME_HEIGHT);
-    VideoWriter video("C:/Users/veras/Desktop/9.04/out.avi", VideoWriter::fourcc('M', 'J', 'P', 'G'), 10, Size(frame_width, frame_height));
+    double fps = cap.get(cv::CAP_PROP_FPS);
+    VideoWriter video("C:/Users/veras/Desktop/9.04/output.mp4", VideoWriter::fourcc('M', 'J', 'P', 'G'), fps, Size(frame_width, frame_height));
 
     //Mat frame = cv::imread("C:/Users/veras/Desktop/image.png", IMREAD_COLOR);
     //resize(frame, frame, cv::Size(700,500));
