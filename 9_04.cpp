@@ -1,4 +1,3 @@
-
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/opencv.hpp>
@@ -26,33 +25,22 @@ int main()
     int frame_width = cap.get(CAP_PROP_FRAME_WIDTH);
     int frame_height = cap.get(CAP_PROP_FRAME_HEIGHT);
     double fps = cap.get(cv::CAP_PROP_FPS);
-    VideoWriter video("C:/Users/veras/Desktop/9.04/output.mp4", VideoWriter::fourcc('M', 'J', 'P', 'G'), fps, Size(frame_width, frame_height));
+    VideoWriter video("C:/Users/veras/Desktop/9.04/output.mp4", VideoWriter::fourcc('m', 'p', '4', 'v'), fps, Size(frame_width, frame_height));
 
-    //Mat frame = cv::imread("C:/Users/veras/Desktop/image.png", IMREAD_COLOR);
-    //resize(frame, frame, cv::Size(700,500));
-    //if (!frame.data) {
-    //    std::cout << "Could not open" << std::endl;
-    //    exit(EXIT_FAILURE);
-    //}
-    //imshow("Original", frame);
-
-    cv::CascadeClassifier face_cascade_eye;
-    //if (!face_cascade_eye.load(samples::findFile("haarcascade_eye.xml")));
+    CascadeClassifier face_cascade_eye;
     if (!face_cascade_eye.load("C:/Users/veras/Desktop/9.04/data/haarcascades/haarcascade_eye.xml")) {
         cout << "File Error" << endl;
         return -1;
     }
 
-    cv::CascadeClassifier face_cascade_smile;
-    //if (!face_cascade_smile.load(samples::findFile("haarcascade_smile.xml")));
+    CascadeClassifier face_cascade_smile;
     if (!face_cascade_smile.load("C:/Users/veras/Desktop/9.04/data/haarcascades/haarcascade_smile.xml")) {
         cout << "File Error" << endl;
         return -1;
     }
 
 
-    cv::CascadeClassifier face_cascade_face;
-    //if (!face_cascade_face.load(samples::findFile("haarcascade_frontalface_default.xml")));
+    CascadeClassifier face_cascade_face;
     if (!face_cascade_face.load("C:/Users/veras/Desktop/9.04/data/haarcascades/haarcascade_frontalface_default.xml")) {
         cout << "File Error" << endl;
         return -1;
@@ -65,10 +53,10 @@ int main()
         cap >> frame;
         if (frame.empty()) break;
         resize(frame, frame, cv::Size(), 0.75, 0.75); // Лучше задавать ресайз через дроби, а не через прямой доступ к пикселям
-        Mat countour_frame = frame.clone();
-        if (countour_frame.empty()) break;
+        Mat original_frame = frame.clone();
         cvtColor(frame, gray, COLOR_BGR2GRAY);
-        GaussianBlur(gray, gauss, Size(3, 3), 0);
+
+        //GaussianBlur(gray, gauss, Size(3, 3), 0);
 
         vector<Rect> eyes, faces, smiles;
         face_cascade_eye.detectMultiScale(gray, eyes, 1.1/*Масштабирование*/, 35 /*Количество соседей в поиске*/, 0, cv::Size(10, 10) /*Минимальный размер объекта (окна отрисовки)*/, /*Максимальный размер объекта (окна отрисовки)*/cv::Size(50, 50));
@@ -91,16 +79,20 @@ int main()
         {
             rectangle(frame, face, Scalar(0, 0, 255), 2);
         }
+
+        resize(frame, frame, Size(frame_width, frame_height));
         imshow("Face", frame);
         video.write(frame);
+        
         char c = (char)cv::waitKey(30);
         if (c == 27) break;
     }
     auto end = chrono::steady_clock::now();
     chrono::duration<double> elapsed_seconds = end - start;
-    cout << "time: " << elapsed_seconds.count()  << endl;
+    cout << "time: " << elapsed_seconds.count() << endl;
 
     cap.release();
+    video.release();
     destroyAllWindows();
     return 0;
 }
