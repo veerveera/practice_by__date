@@ -11,8 +11,6 @@
 using namespace cv;
 using namespace std;
 
-const int NUM_THREADS = 3;
-
 int main()
 {
     auto start = std::chrono::steady_clock::now();
